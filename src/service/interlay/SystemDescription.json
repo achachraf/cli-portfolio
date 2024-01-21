@@ -1,0 +1,30 @@
+{
+    "files":[
+        {
+            "name": "opt",
+            "isDirectory": true
+        },
+        {
+            "name": "etc",
+            "isDirectory": true
+        },
+        {
+            "name": "home",
+            "isDirectory": true,
+            "files": [
+                {
+                    "name": "achraf",
+                    "isDirectory": true,
+                    "files": [
+                        {
+                            "name": "test.txt",
+                            "isDirectory": false,
+                            "content": "Hello World!"
+                        }
+                    ]
+                }
+            ]
+        }
+
+    ]
+}

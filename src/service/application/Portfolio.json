@@ -1,0 +1,121 @@
+{
+    "name":"Achraf",
+    "lastName":"Achkari",
+    "title":"Software Engineer",
+    "projects":[
+        {
+            "name":"Gazelle",
+            "description":"Gazelle Test Bed",
+            "links":[
+                {
+                    "name":"Deploed",
+                    "url":"http://www.google.com"
+                },
+                {
+                    "name":"Github",
+                    "url":"http://www.google.com"
+                }
+            ],
+            "tasks":[
+                {
+                    "name":"gazelle-objects-checker",
+                    "description":"Rennovate and improve the gazelle-objects-checker project to use the later JDK version.",
+                    "status":"done",
+                    "technologies":[
+                        "Java",
+                        "Javascript"
+                    ]
+                },
+                {
+                    "name":"Task 2",
+                    "description":"This is a task",
+                    "status":"done",
+                    "technologies":[
+                        "Java",
+                        "Javascript"
+                    ]
+                },
+                {
+                    "name":"Task 3",
+                    "description":"This is a task",
+                    "status":"done",
+                    "technologies":[
+                        "Java",
+                        "Javascript"
+                    ]
+                }
+            ]
+        },
+        {
+            "name":"Project 2",
+            "description":"This is a project",
+            "links":[
+                {
+                    "name":"Deploed",
+                    "url":"http://www.google.com"
+                }
+            ],
+            "tasks":[
+                {
+                    "name":"Task 1",
+                    "description":"This is a task",
+                    "status":"done",
+                    "technologies":[
+                        "Java",
+                        "Javascript"
+                    ]
+                }
+            ]
+        },
+        {
+            "name":"Project 3",
+            "description":"This is a project",
+            "tasks":[
+                {
+                    "name":"Task 1",
+                    "description":"This is a task",
+                    "status":"done",
+                    "technologies":[
+                        "Java",
+                        "Javascript"
+                    ]
+                },
+                {
+                    "name":"Task 2",
+                    "description":"This is a task",
+                    "status":"done",
+                    "technologies":[
+                        "Java",
+                        "Javascript"
+                    ]
+                }
+            ]
+        }
+    ],
+    "experiences": [
+        {
+            "name":"Company 1",
+            "company":"Company 1",
+            "position":"Position 1",
+            "description":"This is a description",
+            "startDate":"2015-01-01",
+            "endDate":"2015-01-01"
+        },
+        {
+            "name":"Company 2",
+            "company":"Company 2",
+            "position":"Position 2",
+            "description":"This is a description",
+            "startDate":"2015-01-01",
+            "endDate":"2015-01-01"
+        },
+        {
+            "name":"Company 3",
+            "company":"Company 3",
+            "position":"Position 3",
+            "description":"This is a description",
+            "startDate":"2015-01-01",
+            "endDate":"2015-01-01"
+        }
+    ]
+}

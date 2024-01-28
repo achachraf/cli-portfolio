@@ -1,3 +1,0 @@
-type CommandContext = {
-    path: string;  
-};

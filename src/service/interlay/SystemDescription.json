@@ -19,7 +19,10 @@
                         {
                             "name": "test.txt",
                             "isDirectory": false,
-                            "content": "Hello World!"
+                            "content": {
+                                "type": "text",
+                                "text": "Hello World"
+                            }
                         }
                     ]
                 }

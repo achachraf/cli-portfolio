@@ -42,21 +42,26 @@ export class LsCommandHandler implements CommandHandler {
 
         try{
             const list: FileDesc[] = this.systemHierarchyService.list(path, input.params)
-            return {
-                output: list.map(file => file.isDirectory?file.name+"/":file.name).join('\n'),
+             return {
+                output: this.buildOutput(list),
                 context: input.context,
                 error: ''
             }
         } catch (error) {
             return {
-                output: '',
                 context: input.context,
                 error: "No such directory: "+path
             }
         }
-    
         
     }    
+
+    private buildOutput(list: FileDesc[]): TextualContent {
+        return {
+            type: "text",
+            text: list.map(file => file.isDirectory?file.name+"/":file.name).join('\n')
+        }
+    }
 }
 
 export class CdCommandHandler implements CommandHandler {
@@ -74,7 +79,6 @@ export class CdCommandHandler implements CommandHandler {
         let usernamePath = "/home/" + getPortfolio().name.toLowerCase();
         if(input.params.length === 0) {
             return {
-                output: '',
                 context: {
                     path: "~"
                 },
@@ -84,7 +88,6 @@ export class CdCommandHandler implements CommandHandler {
         const path = resolveAbsolutePath(input, usernamePath);
         if(this.systemHierarchyService.exists(path)) {
             return {
-                output: '',
                 context: {
                     path: path.replace(usernamePath, '~')
                 },
@@ -93,14 +96,54 @@ export class CdCommandHandler implements CommandHandler {
         }
         else {
             return {
-                output: '',
                 context: input.context,
                 error: "No such directory: "+path
             }
         }
     }
+}
 
+export class CatCommandHandler implements CommandHandler {
 
+    private systemHierarchyService: SystemHierarchyService;
+
+    constructor(systemHierarchyService: SystemHierarchyService) {
+        this.systemHierarchyService = systemHierarchyService
+    }
+    handle(input: CommandInput): CommandResult {
+        const error:CommandResult|null = handleBadTool(input.tool, 'cat')
+        if(error !== null) {
+            return error
+        }
+        if(input.params.length !== 1) {
+            return {
+                output: {type: "empty"},
+                context: input.context,
+                error: "Invalid number of arguments, cat requires exactly one argument"
+            }
+        }
+        const filePath = input.params[0];
+        let usernamePath = "/home/" + getPortfolio().name.toLowerCase();
+        const absPath = resolveAbsolutePath(input, usernamePath);
+        const parent = absPath.substring(0, absPath.lastIndexOf('/'));
+        const fileName = filePath.split('/').pop();
+        if(fileName === undefined) {
+            throw new Error("Invalid file path: "+filePath);
+        }
+        const content: TextualContent | undefined = this.systemHierarchyService.read(parent, fileName) as TextualContent | undefined;
+        if (content !== undefined) {
+            return {
+                output: content,
+                context: input.context,
+                error: ''
+            }
+        } else {
+            return {
+                context: input.context,
+                error: `No such file: ${parent}/${fileName}`
+            }
+        }
+    }
 }
 
 const resolveAbsolutePath = (input: CommandInput, userPath: string): string => {
@@ -125,7 +168,7 @@ const resolveAbsolutePath = (input: CommandInput, userPath: string): string => {
     return path;
 }
 
-const getParentFolder = (path: string, userPath: string): string => {
+export const getParentFolder = (path: string, userPath: string): string => {
     const pathParts = path.replace("~", userPath).split('/');
     pathParts.pop();
     return pathParts.join('/');

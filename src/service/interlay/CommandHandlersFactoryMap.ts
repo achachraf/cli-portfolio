@@ -1,4 +1,4 @@
-import { CdCommandHandler, LsCommandHandler } from "../application/Handlers";
+import { CatCommandHandler, CdCommandHandler, LsCommandHandler } from "../application/Handlers";
 import SystemHierarchyService from "../application/SystemHierarchyService";
 import SystemHierarchyServiceJson from "./SystemHierarchyServiceJson";
 
@@ -8,7 +8,7 @@ export default class CommandHandlersFactoryMap implements CommandHandlersFactory
     getCommandHandler(command: string): CommandHandler {
         const handler = handlers.get(command);
         if(handler === undefined) {
-            throw new Error(`No handler for command ${command}`);
+            throw new Error(`Command not found: ${command}`);
         }
         return handler;
     }
@@ -21,8 +21,8 @@ const handlers = new Map<string, CommandHandler>(
     [
         ['ls', new LsCommandHandler(systemHierarchyService)],
         ['cd', new CdCommandHandler(systemHierarchyService)],
+        ['cat', new CatCommandHandler(systemHierarchyService)],
         // ['pwd', new PwdCommandHandler()],
-        // ['cat', new CatCommandHandler()],
         // ['echo', new EchoCommandHandler()],
         // ['mkdir', new MkdirCommandHandler()],
         // ['touch', new TouchCommandHandler()],

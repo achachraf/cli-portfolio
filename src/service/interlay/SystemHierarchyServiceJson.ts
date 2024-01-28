@@ -1,7 +1,7 @@
 import SystemHierarchyService from "../application/SystemHierarchyService";
 import fs from 'fs';
 import { FileNotFoundException} from "../application/Exceptions";
-import { getPortfolio } from "../application/Handlers";
+import { getParentFolder, getPortfolio } from "../application/Handlers";
 
 export default class SystemHierarchyServiceJson implements SystemHierarchyService {
 
@@ -27,6 +27,18 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
             throw new FileNotFoundException(`No such directory: ${path}`);
         }
         return filesAtPath;
+    }
+
+    read(directory: string, file: string): RawContent | undefined {
+        const filesAtPath = this.getFilesAtPath(SystemHierarchyServiceJson.systemDescription, directory);
+        if(filesAtPath === undefined) {
+            throw new FileNotFoundException(`No such directory: ${directory}`);
+        }
+        const found = filesAtPath.find(f => !f.isDirectory && f.name === file);
+        if(found === undefined) {
+            throw new FileNotFoundException(`No such file: ${directory}/${file}`);
+        }
+        return found.content;
     }
 
 
@@ -99,30 +111,33 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
                     {
                         name: 'description.txt',
                         isDirectory: false,
-                        content: project.description
+                        content: {
+                            type: 'text',
+                            text: project.description
+                        }
                     },
-                    {
-                        name: 'links',
-                        isDirectory: true,
-                        files: project.links?.map(link => {
-                            return {
-                                name: link.name,
-                                isDirectory: false,
-                                content: link.url
-                            }
-                        })
-                    },
-                    {
-                        name: 'tasks',
-                        isDirectory: true,
-                        files: project.tasks?.map(task => {
-                            return {
-                                name: task.name,
-                                isDirectory: false,
-                                content: task.description
-                            }
-                        })
-                    }
+                    // {
+                    //     name: 'links',
+                    //     isDirectory: true,
+                    //     files: project.links?.map(link => {
+                    //         return {
+                    //             name: link.name,
+                    //             isDirectory: false,
+                    //             content: link.url
+                    //         }
+                    //     })
+                    // },
+                    // {
+                    //     name: 'tasks',
+                    //     isDirectory: true,
+                    //     files: project.tasks?.map(task => {
+                    //         return {
+                    //             name: task.name,
+                    //             isDirectory: false,
+                    //             content: task.description
+                    //         }
+                    //     })
+                    // }
                 ]
             }
         });
@@ -144,14 +159,22 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
         });
     }
 
-    private static buildExperienceInfo(experience: Experience): string {
-        return `Company: ${experience.company}
-                Position: ${experience.position}
-                Description: ${experience.description}
-                Start Date: ${experience.startDate}
-                End Date: ${experience.endDate}
-        `;
+    private static buildExperienceInfo(experience: Experience): TextualContent {
+        return {
+            type: 'text',
+            text:`Company: ${experience.company}
+            Position: ${experience.position}
+            Description: ${experience.description}
+            Start Date: ${experience.startDate}
+            End Date: ${experience.endDate}
+            `
+        } 
     }
 
+
     
+}
+
+type TextualContent = RawContent & {
+    text: string;
 }

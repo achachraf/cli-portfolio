@@ -56,10 +56,10 @@ export class LsCommandHandler implements CommandHandler {
         
     }    
 
-    private buildOutput(list: FileDesc[]): TextualContent {
+    private buildOutput(list: FileDesc[]): RawContent {
         return {
             type: "text",
-            text: list.map(file => file.isDirectory?file.name+"/":file.name).join('\n')
+            data: list.map(file => file.isDirectory?file.name+"/":file.name).join('\n')
         }
     }
 }
@@ -122,15 +122,8 @@ export class CatCommandHandler implements CommandHandler {
                 error: "Invalid number of arguments, cat requires exactly one argument"
             }
         }
-        const filePath = input.params[0];
-        let usernamePath = "/home/" + getPortfolio().name.toLowerCase();
-        const absPath = resolveAbsolutePath(input, usernamePath);
-        const parent = absPath.substring(0, absPath.lastIndexOf('/'));
-        const fileName = filePath.split('/').pop();
-        if(fileName === undefined) {
-            throw new Error("Invalid file path: "+filePath);
-        }
-        const content: TextualContent | undefined = this.systemHierarchyService.read(parent, fileName) as TextualContent | undefined;
+        const {parent, filename} = splitPath(input);
+        const content: RawContent | undefined = this.systemHierarchyService.read(parent, filename) as RawContent | undefined;
         if (content !== undefined) {
             return {
                 output: content,
@@ -140,10 +133,67 @@ export class CatCommandHandler implements CommandHandler {
         } else {
             return {
                 context: input.context,
-                error: `No such file: ${parent}/${fileName}`
+                error: `No such file: ${parent}/${filename}`
             }
         }
     }
+}
+
+export class DisplayCommandHandler implements CommandHandler {
+    
+    private systemHierarchyService: SystemHierarchyService;
+
+    constructor(systemHierarchyService: SystemHierarchyService) {
+        this.systemHierarchyService = systemHierarchyService
+    }
+
+
+    handle(input: CommandInput): CommandResult {
+        const error:CommandResult|null = handleBadTool(input.tool, 'display')
+        if(error !== null) {
+            return error
+        }
+        if(input.params.length !== 1 || !input.params[0].endsWith('.json')) {
+            return {
+                output: {type: "empty"},
+                context: input.context,
+                error: "Invalid number of arguments, display requires exactly one json argument"
+            }
+        }
+        const {parent, filename} = splitPath(input);
+        const content: JsonContent | undefined = this.systemHierarchyService.read(parent, filename) as JsonContent | undefined;
+        if (content === undefined) {
+            return {
+                context: input.context,
+                error: `No such file: ${parent}/${filename}`
+            }
+        }
+        if(content.data === undefined) {
+            return {
+                context: input.context,
+                error: `Invalid json file: ${parent}/${filename}`
+            }
+        }
+        if(content.parsed === undefined) {
+            try {
+                content.parsed = JSON.parse(content.data);
+            } catch (error) {
+                return {
+                    context: input.context,
+                    error: `Invalid json file: ${parent}/${filename}`
+                }
+            }
+        }
+        return {
+            output: content,
+            context: input.context,
+            error: ''
+        }
+
+    }
+
+
+
 }
 
 const resolveAbsolutePath = (input: CommandInput, userPath: string): string => {
@@ -167,6 +217,22 @@ const resolveAbsolutePath = (input: CommandInput, userPath: string): string => {
 
     return path;
 }
+
+const splitPath = (input: CommandInput): {parent: string, filename: string} => {
+    const filePath = input.params[0];
+    let usernamePath = "/home/" + getPortfolio().name.toLowerCase();
+    const absPath = resolveAbsolutePath(input, usernamePath);
+    const parent = absPath.substring(0, absPath.lastIndexOf('/'));
+    const filename = filePath.split('/').pop();
+    if(filename === undefined) {
+        throw new Error("Invalid file path: "+filePath);
+    }
+    return {
+        parent,
+        filename
+    }
+}
+    
 
 export const getParentFolder = (path: string, userPath: string): string => {
     const pathParts = path.replace("~", userPath).split('/');

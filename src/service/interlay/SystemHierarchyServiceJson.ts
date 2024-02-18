@@ -78,8 +78,6 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
 
   
     private static buildUserSystemDescription(initialSystemDesc: FileDesc[], porftolio: Portfolio) {
-        console.log("aaaa")
-        console.log(porftolio.projects);
         const projects:FileDesc[] = this.buildProjects(porftolio.projects);
         const experiences:FileDesc[] = this.buildExperiences(porftolio.experiences);
         const UserHome = initialSystemDesc
@@ -90,7 +88,7 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
                 {
                     name: 'projects',
                     isDirectory: true,
-                    files: projects
+                    files: [...projects, this.buildProjectsSynthesis(porftolio.projects)]
                 },
                 {
                     name: 'experiences',
@@ -113,31 +111,37 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
                         isDirectory: false,
                         content: {
                             type: 'text',
-                            text: project.description
+                            data: project.description
                         }
                     },
-                    // {
-                    //     name: 'links',
-                    //     isDirectory: true,
-                    //     files: project.links?.map(link => {
-                    //         return {
-                    //             name: link.name,
-                    //             isDirectory: false,
-                    //             content: link.url
-                    //         }
-                    //     })
-                    // },
-                    // {
-                    //     name: 'tasks',
-                    //     isDirectory: true,
-                    //     files: project.tasks?.map(task => {
-                    //         return {
-                    //             name: task.name,
-                    //             isDirectory: false,
-                    //             content: task.description
-                    //         }
-                    //     })
-                    // }
+                    {
+                        name: 'links',
+                        isDirectory: true,
+                        files: project.links?.map(link => {
+                            return {
+                                name: link.name,
+                                isDirectory: false,
+                                content: {
+                                    type: 'text',
+                                    data: link.url
+                                }
+                            }
+                        })
+                    },
+                    {
+                        name: 'tasks',
+                        isDirectory: true,
+                        files: project.tasks?.map(task => {
+                            return {
+                                name: task.name,
+                                isDirectory: false,
+                                content: {
+                                    type: 'text',
+                                    data: task.description
+                                }
+                            }
+                        })
+                    }
                 ]
             }
         });
@@ -159,10 +163,10 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
         });
     }
 
-    private static buildExperienceInfo(experience: Experience): TextualContent {
+    private static buildExperienceInfo(experience: Experience): RawContent {
         return {
             type: 'text',
-            text:`Company: ${experience.company}
+            data:`Company: ${experience.company}
             Position: ${experience.position}
             Description: ${experience.description}
             Start Date: ${experience.startDate}
@@ -171,10 +175,24 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
         } 
     }
 
-
-    
+    private static buildProjectsSynthesis(projects: Project[]):FileDesc {
+        return {
+            name: 'synthesis.json',
+            isDirectory: false,
+            content: {
+                type: 'json',
+                data: JSON.stringify(projects),
+                dataType: 'projects'
+            } as JsonContent
+        }
+    }
 }
 
-type TextualContent = RawContent & {
-    text: string;
+
+
+export type Portfolio = {
+    name: string;
+    projects: Project[];
+    experiences: Experience[];
 }
+

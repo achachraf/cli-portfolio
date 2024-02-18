@@ -1,4 +1,4 @@
-import { CatCommandHandler, CdCommandHandler, LsCommandHandler } from "../application/Handlers";
+import { CatCommandHandler, CdCommandHandler, DisplayCommandHandler, LsCommandHandler } from "../application/Handlers";
 import SystemHierarchyService from "../application/SystemHierarchyService";
 import SystemHierarchyServiceJson from "./SystemHierarchyServiceJson";
 
@@ -22,6 +22,7 @@ const handlers = new Map<string, CommandHandler>(
         ['ls', new LsCommandHandler(systemHierarchyService)],
         ['cd', new CdCommandHandler(systemHierarchyService)],
         ['cat', new CatCommandHandler(systemHierarchyService)],
+        ['display', new DisplayCommandHandler(systemHierarchyService)],
         // ['pwd', new PwdCommandHandler()],
         // ['echo', new EchoCommandHandler()],
         // ['mkdir', new MkdirCommandHandler()],

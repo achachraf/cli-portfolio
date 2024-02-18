@@ -1,11 +1,13 @@
 type RawContent = {
     type: string;
-}
-
-type TextualContent = RawContent & {
-    text: string;
+    data?: string;
 }
 
 type GraphicalContent = RawContent & {
     image: string;
+}
+
+type JsonContent = RawContent & {
+    dataType: string;
+    parsed?: any;
 }

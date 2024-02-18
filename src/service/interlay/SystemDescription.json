@@ -21,7 +21,7 @@
                             "isDirectory": false,
                             "content": {
                                 "type": "text",
-                                "text": "Hello World"
+                                "data": "Hello World"
                             }
                         }
                     ]

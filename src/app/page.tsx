@@ -1,10 +1,11 @@
 'use client';
 
+import OutputFactory from '@/components/output/OutputFactory';
 import { getShortcutCmd, isShortcutCmd } from '@/components/Shortcuts';
 import { FileNotFoundException } from '@/service/application/Exceptions';
 import { create } from 'domain';
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export default function Home() {
 
@@ -107,6 +108,7 @@ export default function Home() {
 
   useEffect(() => {
     scrollToBottom();
+    console.log("output changed");
   }, [output]);
 
   const executeCommand = async () => {
@@ -133,8 +135,8 @@ export default function Home() {
       catch (err) {
         const error = err as Error;
         setOutput(prevOutput => [...prevOutput,
-          { value: {type:"text", text:input}, isOutput: false, context: { path: context } },
-          { value: {type:"text", text:`Error: ${error.message}`}, isOutput: true, context: ctxResult },
+          { value: {type:"text", data:input}, isOutput: false, context: { path: context } },
+          { value: {type:"text", data:`Error: ${error.message}`}, isOutput: true, context: ctxResult },
         ]);
         return;
       }
@@ -142,8 +144,8 @@ export default function Home() {
       if (result.error) {
         cmdResult = {
           type: 'text',
-          text: result.error
-        } as TextualContent;
+          data: result.error
+        } as RawContent;
       }
       else {
         cmdResult = result.output;
@@ -151,7 +153,7 @@ export default function Home() {
       ctxResult = result.context;
     }
     setOutput(prevOutput => [...prevOutput,
-      { value: {type:"text", text:input}, isOutput: false, context: { path: context } },
+      { value: {type:"text", data:input}, isOutput: false, context: { path: context } },
       { value: cmdResult, isOutput: true, context: ctxResult }
     ]);
 
@@ -184,13 +186,19 @@ export default function Home() {
   };
 
 
+  const renderedOutput = useMemo(() => output.map((line, index) => (
+    <p key={index}>
+      {!line.isOutput && (<><span className="text-green-700">user@portfolio</span>{':'}<span className="text-blue-400">{line.context?.path}</span><span className="font-bold">$</span>&nbsp;</>)}
+      <OutputFactory {...line.value as RawContent} />
+    </p>
+  )), [output]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       {/* Centered Box */}
       <div className=" rounded-lg shadow-md w-3/4 " onClick={() => inputRef.current?.focus()} >
         {/* Browser Window Header */}
-        <div className="flex items-center justify-between mb-2 p-3 bg-slate-300 rounded-t-lg">
+        <div className="flex items-center justify-between p-3 bg-slate-300 rounded-t-lg">
           {/* Browser Window Buttons (Red, Yellow, Green) */}
           <div className="flex space-x-1">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
@@ -204,11 +212,7 @@ export default function Home() {
           {showDocumentation && (<pre className="text-white font-mono font-light">{documentation}</pre>)}
           <div className="bg-black text-white p-6 rounded-b-md h-full relative">
             {/* CLI Output */}
-            {output.map((line, index) => (
-              <p key={index}>
-                
-            </p>
-            ))}
+            {renderedOutput}
 
             {/* CLI Input with Blinking Cursor */}
             {showUserInput && 
@@ -225,10 +229,7 @@ export default function Home() {
             </div>
             )}
           </div>
-
         </div>
-
-
       </div>
     </div>
   );

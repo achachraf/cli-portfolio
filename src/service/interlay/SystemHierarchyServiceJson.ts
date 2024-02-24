@@ -88,12 +88,12 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
                 {
                     name: 'projects',
                     isDirectory: true,
-                    files: [...projects, this.buildProjectsSynthesis(porftolio.projects)]
+                    files: [...projects, this.buildSynthesis(porftolio.projects, 'projects')]
                 },
                 {
                     name: 'experiences',
                     isDirectory: true,
-                    files: experiences
+                    files: [...experiences, this.buildSynthesis(porftolio.experiences, 'experiences')]
                 }
             ]);
         }
@@ -175,17 +175,19 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
         } 
     }
 
-    private static buildProjectsSynthesis(projects: Project[]):FileDesc {
+    private static buildSynthesis(obj: any, dataType: string):FileDesc {
         return {
             name: 'synthesis.json',
             isDirectory: false,
             content: {
                 type: 'json',
-                data: JSON.stringify(projects),
-                dataType: 'projects'
+                data: JSON.stringify(obj),
+                dataType
             } as JsonContent
         }
     }
+
+
 }
 
 

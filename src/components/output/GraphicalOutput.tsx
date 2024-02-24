@@ -1,5 +1,7 @@
 import React from 'react';
 import ProjectsOutput from './ProjectOutput';
+import ErrorOutput from './ErrorOutput';
+import ExperienceOutput from './ExperienceOutput';
 
 const GraphicalOutput: React.FC<RawContent> = (content: RawContent) => {
     const graphicalContent = content as JsonContent;
@@ -16,10 +18,14 @@ const GraphicalOutput: React.FC<RawContent> = (content: RawContent) => {
     switch(graphicalContent.dataType){
         case 'projects': {
             const projects: Project[] = parsedContent as Project[];
-            return <ProjectsOutput {...projects} />
+            return ProjectsOutput(projects);
+        }
+        case 'experiences': {
+            const experiences: Experience[] = parsedContent as Experience[];
+            return ExperienceOutput(experiences);
         }
         default:
-            return null;
+            return <ErrorOutput message={`Unknown graphical content type: ${graphicalContent.dataType}`} />;
     }
 };
 

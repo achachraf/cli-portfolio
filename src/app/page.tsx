@@ -44,7 +44,7 @@ export default function Home() {
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (input === 'clear') {
+      if (input.trim() === 'clear') {
         setOutput([]);
         setInput('');
         return;
@@ -189,7 +189,7 @@ export default function Home() {
   const renderedOutput = useMemo(() => output.map((line, index) => (
     <p key={index}>
       {!line.isOutput && (<><span className="text-green-700">user@portfolio</span>{':'}<span className="text-blue-400">{line.context?.path}</span><span className="font-bold">$</span>&nbsp;</>)}
-      <OutputFactory {...line.value as RawContent} />
+      {line.value && <OutputFactory {...line.value as RawContent} />}
     </p>
   )), [output]);
 
@@ -221,7 +221,7 @@ export default function Home() {
               <input
                 ref={inputRef}
                 type="text"
-                className="outline-none bg-transparent text-white"
+                className="outline-none bg-transparent text-white w-3/4"
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}

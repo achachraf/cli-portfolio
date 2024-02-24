@@ -7,6 +7,7 @@
         {
             "name":"Gazelle",
             "description":"Gazelle Test Bed",
+            "logo": "https://gazelle.ihe.net/files/LOGO_0.png",
             "links":[
                 {
                     "name":"Deploed",
@@ -100,7 +101,8 @@
             "position":"Position 1",
             "description":"This is a description",
             "startDate":"2015-01-01",
-            "endDate":"2015-01-01"
+            "endDate":"2015-01-01",
+            "logo": "https://www.kereval.com/wp-content/uploads/2021/06/Logo_Kereval_WR.png"
         },
         {
             "name":"Company 2",

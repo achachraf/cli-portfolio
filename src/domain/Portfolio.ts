@@ -11,6 +11,7 @@ type Project = {
     description: string;
     links: Link[];
     tasks: Task[];
+    logo?: string;
 }
 
 type Link = {
@@ -32,5 +33,6 @@ type Experience = {
     description: string;
     startDate: string;
     endDate: string;
+    logo?: string;
 }
 

@@ -1,7 +1,8 @@
 import React from 'react';
-import ProjectsOutput from './ProjectOutput';
+import ProjectsOutput from './project/ProjectsOutput';
 import ErrorOutput from './ErrorOutput';
-import ExperienceOutput from './ExperienceOutput';
+import ExperiencesOutput from './experience/ExperiencesOutput';
+import DetailedProject from "@/components/output/project/DetailedProject";
 
 const GraphicalOutput: React.FC<RawContent> = (content: RawContent) => {
     const graphicalContent = content as JsonContent;
@@ -22,7 +23,11 @@ const GraphicalOutput: React.FC<RawContent> = (content: RawContent) => {
         }
         case 'experiences': {
             const experiences: Experience[] = parsedContent as Experience[];
-            return ExperienceOutput(experiences);
+            return ExperiencesOutput(experiences);
+        }
+        case 'project': {
+            const project: Project = parsedContent as Project;
+            return DetailedProject(project);
         }
         default:
             return <ErrorOutput message={`Unknown graphical content type: ${graphicalContent.dataType}`} />;

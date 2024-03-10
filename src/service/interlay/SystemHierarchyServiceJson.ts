@@ -114,6 +114,7 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
                             data: project.description
                         }
                     },
+                    this.buildSynthesis(project, 'project'),
                     {
                         name: 'links',
                         isDirectory: true,

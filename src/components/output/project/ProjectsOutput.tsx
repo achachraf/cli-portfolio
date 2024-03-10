@@ -6,7 +6,7 @@ const ProjectsOutput: React.FC<Project[]> = (projects: Project[]) => {
     return (
         <div className="flex flex-col space-y-4">
             {projects.map((project, index) => (
-                  <div className="bg-black p-4 rounded-md shadow-md flex items-center">
+                  <div key={index} className="bg-black p-4 rounded-md shadow-md flex items-center">
                   {project.logo && (
                     <div className="mr-4">
                       <Image

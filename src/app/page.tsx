@@ -1,11 +1,8 @@
 'use client';
 
 import OutputFactory from '@/components/output/OutputFactory';
-import { getShortcutCmd, isShortcutCmd } from '@/components/Shortcuts';
-import { FileNotFoundException } from '@/service/application/Exceptions';
-import { create } from 'domain';
-import Image from 'next/image'
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {getShortcutCmd, isShortcutCmd} from '@/components/Shortcuts';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
 export default function Home() {
 
@@ -13,10 +10,12 @@ export default function Home() {
   WELCOME TO ACHRAF'S PORTFOLIO
 
   COMMANDS:
-    -h, --help         Display this help message
-    -p, --projects     Show all projects directories
-    -a, --about        Show information about me
-    -e, --experiences  Show all experiences directories
+    h, help        Display this help message
+    p, projects     Show all projects directories
+    a, about        Show information about me
+    e, experiences  Show all experiences directories
+    
+    For example, to list all projects, you can type "projects" or "p" below and press enter.
 `;
 
   const userPrefix = <span className="text-green-700">user@portfolio</span>;
@@ -48,9 +47,6 @@ export default function Home() {
         setOutput([]);
         setInput('');
         return;
-      }
-      if (isShortcutCmd(input)) {
-        setInput(getShortcutCmd(input));
       }
       await executeCommand();
     }
@@ -111,7 +107,26 @@ export default function Home() {
     console.log("output changed");
   }, [output]);
 
+  useEffect(() => {
+    const history = localStorage.getItem('history');
+    if (history) {
+      let parsed = JSON.parse(history);
+      setHistory(parsed);
+      setHistoryIndex(parsed.length)
+    }
+  }, []);
+
+  useEffect(() => {
+    if(history.length > 0 ) {
+      localStorage.setItem('history', JSON.stringify(history));
+    }
+  }, [history]);
+
   const executeCommand = async () => {
+    let toExecute = input;
+    if (isShortcutCmd(input)) {
+      toExecute = getShortcutCmd(input);
+    }
     let cmdResult: RawContent | undefined;
     let ctxResult: CommandContext = { path: context };
     if (input === '') {
@@ -120,7 +135,7 @@ export default function Home() {
     else {
       setHistory(prevHistory => [...prevHistory, input]);
       setHistoryIndex(history.length + 1);
-      const request: CommandInput = createCommandInput(input);
+      const request: CommandInput = createCommandInput(toExecute);
       let result: CommandResult;
       try {
         const res = await fetch(`/api/command`, {
@@ -193,6 +208,7 @@ export default function Home() {
     </p>
   )), [output]);
 
+  // @ts-ignore
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       {/* Centered Box */}
@@ -217,11 +233,11 @@ export default function Home() {
             {/* CLI Input with Blinking Cursor */}
             {showUserInput && 
             (<div className="flex items-center">
-              <p><span className="text-green-700">user@portfolio</span>:<span className="text-blue-400">{context}</span><span className="font-bold">$</span>&nbsp;</p>
+              <nobr className="flex-grow"><span className="text-green-700">user@portfolio</span>:<span className="text-blue-400">{context}</span><span className="font-bold">$</span>&nbsp;</nobr>
               <input
                 ref={inputRef}
                 type="text"
-                className="outline-none bg-transparent text-white w-3/4"
+                className="outline-none bg-transparent text-white flex-shrink w-full"
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}

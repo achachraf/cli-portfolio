@@ -10,85 +10,113 @@
             "logo": "https://gazelle.ihe.net/files/LOGO_0.png",
             "links":[
                 {
-                    "name":"Deploed",
-                    "url":"http://www.google.com"
+                    "name":"Deployed",
+                    "url":"https://gazelle.ihe.net/"
                 },
                 {
                     "name":"Github",
-                    "url":"http://www.google.com"
+                    "url":"https://gitlab.inria.fr/gazelle/"
                 }
             ],
             "tasks":[
                 {
-                    "name":"gazelle-objects-checker",
-                    "description":"Rennovate and improve the gazelle-objects-checker project to use the later JDK version.",
-                    "status":"done",
+                    "name":"Gazelle Proxy",
+                    "description":"Coordinate the renovation the Core Gazelle Proxy to support new protocols and security standards",
+                    "status":"In Progress",
                     "technologies":[
-                        "Java",
-                        "Javascript"
+                        "Java 17/21",
+                        "Jakarta EE",
+                        "Quarkus",
+                        "Netty",
+                        "Next.js",
+                        "Docker"
                     ]
                 },
                 {
-                    "name":"Task 2",
-                    "description":"This is a task",
-                    "status":"done",
+                    "name":"Validation Service API",
+                    "description":"Create a new API to unify all the validation services consumed by Gazelle",
+                    "status":"Done",
                     "technologies":[
-                        "Java",
-                        "Javascript"
+                        "Java 17",
+                        "MicroProfile",
+                        "JAX-RS",
+                        "TDD"
                     ]
                 },
                 {
-                    "name":"Task 3",
-                    "description":"This is a task",
-                    "status":"done",
+                    "name":"Gazelle Objects Checker",
+                    "description":"Renovate the validator generator engine to recent JDK and enhance the validation rules",
+                    "status":"Done",
                     "technologies":[
                         "Java",
-                        "Javascript"
+                        "OCL",
+                        "XML",
+                        "SOAP",
+                        "BASH"
                     ]
                 }
             ]
         },
         {
-            "name":"Project 2",
-            "description":"This is a project",
+            "name":"Typeson",
+            "description":"Polymorphic JSON serialization and deserialization library",
             "links":[
                 {
-                    "name":"Deploed",
-                    "url":"http://www.google.com"
+                    "name":"Github",
+                    "url":"https://github.com/achachraf/Typeson"
+                },
+                {
+                    "name":"Maven",
+                    "url":"https://mvnrepository.com/artifact/io.github.achachraf/typeson/1.0.1"
                 }
             ],
             "tasks":[
                 {
-                    "name":"Task 1",
-                    "description":"This is a task",
-                    "status":"done",
+                    "name":"JSON Object Mapper",
+                    "description":"Develop a new JSON object mapper to support polymorphic serialization and deserialization",
+                    "status":"Done",
                     "technologies":[
-                        "Java",
-                        "Javascript"
+                        "Java 17",
+                        "GraphScan",
+                        "Reflection",
+                        "TDD"
+                    ]
+                },
+                {
+                    "name":"Integration with Jackson",
+                    "description":"Integrate Typeson with Jackson to support polymorphic serialization and deserialization",
+                    "status":"Done",
+                    "technologies":[
+                        "Java 17",
+                        "Jackson"
                     ]
                 }
             ]
         },
         {
-            "name":"Project 3",
-            "description":"This is a project",
+            "name":"CLI Portfolio",
+            "description":"Create a CLI portfolio to display my resume",
             "tasks":[
                 {
-                    "name":"Task 1",
-                    "description":"This is a task",
-                    "status":"done",
+                    "name":"Main CLI",
+                    "description":"Create the main CLI with basic commands handling",
+                    "status":"Done",
                     "technologies":[
-                        "Java",
-                        "Javascript"
+                        "Next.js",
+                        "SSR",
+                        "Typescript"
                     ]
                 },
                 {
-                    "name":"Task 2",
-                    "description":"This is a task",
-                    "status":"done",
+                    "name":"Enhanced terminal",
+                    "description":"Enhance the terminal to support graphical content",
+                    "status":"Done",
                     "technologies":[
-                        "Java",
-                        "Javascript"
+                        "Next.js",
+                        "Next API",
+                        "SSR",
+                        "Typescript",
+                        "Jest"
                     ]
                 }
             ]
@@ -96,29 +124,33 @@
     ],
     "experiences": [
         {
-            "name":"Company 1",
-            "company":"Company 1",
-            "position":"Position 1",
-            "description":"This is a description",
-            "startDate":"2015-01-01",
-            "endDate":"2015-01-01",
+            "company":"Kereval",
+            "position":"TechLead",
+            "description":"Coordinate the technical team to deliver the best quality software",
+            "startDate":"01-01-2023",
+            "endDate":"current",
             "logo": "https://www.kereval.com/wp-content/uploads/2021/06/Logo_Kereval_WR.png"
         },
         {
-            "name":"Company 2",
-            "company":"Company 2",
-            "position":"Position 2",
-            "description":"This is a description",
-            "startDate":"2015-01-01",
-            "endDate":"2015-01-01"
+            "company":"Kereval",
+            "position":"Software Engineer",
+            "description":"Technical Referent for the Gazelle Test Bed tools",
+            "startDate":"01-10-2021",
+            "endDate":"31-12-2022"
         },
         {
-            "name":"Company 3",
-            "company":"Company 3",
-            "position":"Position 3",
-            "description":"This is a description",
-            "startDate":"2015-01-01",
-            "endDate":"2015-01-01"
+            "company":"Kereval",
+            "position":"Intern",
+            "description":"Developed and improved the Gazelle Test Bed tools",
+            "startDate":"06-04-2021",
+            "endDate":"31-09-2021"
+        },
+        {
+            "company":"Veolia",
+            "position":"Intern",
+            "description":"Developed Ticketing System for the company's employees",
+            "startDate":"01-07-2019",
+            "endDate":"01-08-2019"
         }
     ]
 }

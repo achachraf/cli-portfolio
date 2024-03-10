@@ -126,7 +126,10 @@ export class CatCommandHandler implements CommandHandler {
         const content: RawContent | undefined = this.systemHierarchyService.read(parent, filename) as RawContent | undefined;
         if (content !== undefined) {
             return {
-                output: content,
+                output:{
+                    type: "text", // override type to text
+                    data: content.data
+                },
                 context: input.context,
                 error: ''
             }
@@ -168,7 +171,7 @@ export class DisplayCommandHandler implements CommandHandler {
                 error: `No such file: ${parent}/${filename}`
             }
         }
-        if(content.data === undefined) {
+        if(content.data === undefined || content.type !== "json") {
             return {
                 context: input.context,
                 error: `Invalid json file: ${parent}/${filename}`

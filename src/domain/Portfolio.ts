@@ -4,6 +4,7 @@ type Portfolio = {
     title: string;    
     projects: Project[];
     experiences: Experience[];
+    about: About;
 }
 
 type Project = {
@@ -35,4 +36,29 @@ type Experience = {
     endDate: string;
     logo?: string;
 }
+
+type About = {
+    image: string;
+    FullName: string;
+    title: string;
+    description: string;
+    skills: string[];
+    contact: Contact;
+    languages: Language[];
+    interests: string[];
+}
+
+type Contact = {
+    email: string;
+    phone: string;
+    linkedin: string;
+    github: string;
+    Address: string;
+}
+
+type Language = {
+    name: string;
+    level: string;
+}
+
 

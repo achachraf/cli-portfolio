@@ -20,8 +20,8 @@ const shortcutsMap: Map<string, (args:string[]) => string> = new Map([
     ['e', () => 'display /home/achraf/experiences/synthesis.json'],
     ['experiences', () => 'display /home/achraf/experiences/synthesis.json'],
     ['experience', (args:string[]) => `display /home/achraf/experiences/${args[0]}/synthesis.json`],
-    ['a', () => 'display /home/achraf/about.json'],
-    ['about', () => 'display /home/achraf/about.json'],
+    ['a', () => 'display /home/achraf/about/synthesis.json'],
+    ['about', () => 'display /home/achraf/about/synthesis.json'],
     ['clear', () => 'clear']
   
 ]);

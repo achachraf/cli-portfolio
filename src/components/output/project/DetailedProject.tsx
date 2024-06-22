@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-const DetailedProject = (project: Project) => {
+const DetailedProject = ({project}:{project: Project}) => {
     return (
         <div>
             <div className="bg-black p-4 rounded-md shadow-md flex items-center">

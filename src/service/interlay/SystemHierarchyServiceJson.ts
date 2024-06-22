@@ -94,6 +94,13 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
                     name: 'experiences',
                     isDirectory: true,
                     files: [...experiences, this.buildSynthesis(porftolio.experiences, 'experiences')]
+                },
+                {
+                    name: 'about',
+                    isDirectory: true,
+                    files: [
+                        this.buildSynthesis(porftolio.about, 'about') 
+                    ]
                 }
             ]);
         }
@@ -193,9 +200,4 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
 
 
 
-export type Portfolio = {
-    name: string;
-    projects: Project[];
-    experiences: Experience[];
-}
 

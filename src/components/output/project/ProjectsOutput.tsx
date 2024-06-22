@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-const ProjectsOutput: React.FC<Project[]> = (projects: Project[]) => {
+const ProjectsOutput = ({projects}:{projects: Project[]}) => {
     console.log(projects);
     return (
         <div className="flex flex-col space-y-4">

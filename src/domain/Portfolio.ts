@@ -61,4 +61,8 @@ type Language = {
     level: string;
 }
 
+type Documentation = {
+    text: string;
+}
+
 

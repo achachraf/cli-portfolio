@@ -124,6 +124,7 @@
     ],
     "experiences": [
         {
+            "name":"techlead-kereval",
             "company":"Kereval",
             "position":"TechLead",
             "description":"Coordinate the technical team to deliver the best quality software",
@@ -132,6 +133,7 @@
             "logo": "https://www.kereval.com/wp-content/uploads/2021/06/Logo_Kereval_WR.png"
         },
         {
+            "name":"software-engineer-kereval",
             "company":"Kereval",
             "position":"Software Engineer",
             "description":"Technical Referent for the Gazelle Test Bed tools",
@@ -140,6 +142,7 @@
             "logo": "https://www.kereval.com/wp-content/uploads/2021/06/Logo_Kereval_WR.png"
         },
         {
+            "name":"intern-kereval",
             "company":"Kereval",
             "position":"Intern",
             "description":"Developed and improved the Gazelle Test Bed tools",
@@ -148,6 +151,7 @@
             "logo": "https://www.kereval.com/wp-content/uploads/2021/06/Logo_Kereval_WR.png"
         },
         {
+            "name":"intern-veolia",
             "company":"Veolia",
             "position":"Intern",
             "description":"Developed Ticketing System for the company's employees",

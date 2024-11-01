@@ -181,6 +181,7 @@ export class DisplayCommandHandler implements CommandHandler {
             try {
                 content.parsed = JSON.parse(content.data);
             } catch (error) {
+                console.error("Error parsing json file", error);
                 return {
                     context: input.context,
                     error: `Invalid json file: ${parent}/${filename}`

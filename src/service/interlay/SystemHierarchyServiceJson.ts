@@ -64,11 +64,11 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
     private static initialize(): void {
         if(SystemHierarchyServiceJson.systemDescription) return;
         try {
-            const porftolio:Portfolio  = getPortfolio();
+            const portfolio:Portfolio  = getPortfolio();
             const systemDescriptionPath = './src/service/interlay/SystemDescription.json';
             const systemDescriptionContent = fs.readFileSync(systemDescriptionPath, 'utf8');
             const initialSystemDesc:FileDesc[]  = JSON.parse(systemDescriptionContent).files;
-            this.buildUserSystemDescription(initialSystemDesc, porftolio);
+            this.buildUserSystemDescription(initialSystemDesc, portfolio);
             SystemHierarchyServiceJson.systemDescription = initialSystemDesc;
 
         } catch (error) {
@@ -110,7 +110,7 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
     private static buildProjects(projects: Project[]): FileDesc[] {
         return projects.map(project => {
             return {
-                name: project.name,
+                name: project.name.replace(/\s/g, '_'),
                 isDirectory: true,
                 files: [
                     {
@@ -158,14 +158,15 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
     private static buildExperiences(experiences: Experience[]): FileDesc[] {
         return experiences.map(experience => {
             return {
-                name: experience.name,
+                name: experience.name.replace(/\s/g, '_'),
                 isDirectory: true,
                 files: [
                     {
-                        name: 'info.txt',
+                        name: 'description.txt',
                         isDirectory: false,
                         content: this.buildExperienceInfo(experience)
                     },
+                    this.buildSynthesis(experience, 'experience')
                 ]
             }
         });

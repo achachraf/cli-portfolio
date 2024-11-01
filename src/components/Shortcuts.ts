@@ -12,8 +12,8 @@ export function getShortcutCmd(cmd: string): string {
 
 
 const shortcutsMap: Map<string, (args:string[]) => string> = new Map([
-    ['h', () => 'cat help.txt'],
-    ['help', () => 'cat help.txt'],
+    ['h', () => 'display help.json'],
+    ['help', () => 'display help.json'],
     ['p', () => 'display /home/achraf/projects/synthesis.json'],
     ['projects', () =>  'display /home/achraf/projects/synthesis.json'],
     ['project', (args:string[]) => `display /home/achraf/projects/${args[0]}/synthesis.json`],

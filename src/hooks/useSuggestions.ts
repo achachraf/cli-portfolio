@@ -11,7 +11,7 @@ export const useSuggestions = (
 
     const [lastTabPressTime, setLastTabPressTime] = useState(0);
 
-    const {trigger: postCommand} = usePostCommand();
+    const {} = usePostCommand({});
 
 
     useEffect(() => {
@@ -62,12 +62,7 @@ export const useSuggestions = (
                 path: context
             }
         }
-        const result = await postCommand(request);
-        console.log({input});
-        const last = input.split(' ').length > 1 ? input.split(' ').slice(-1)[0] : '';
-        console.log({last});
-        return result.output?.data?.split('\n')
-            .filter((file: string) => file.startsWith(last)) ?? [];
+        return [""];
 
     };
 

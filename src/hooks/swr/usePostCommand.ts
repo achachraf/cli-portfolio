@@ -1,26 +1,38 @@
 import useSWRMutation from 'swr/mutation';
+import useSWR, {SWRConfiguration} from "swr";
 
-// Define the fetcher for the SWR mutation hook
-const fetcher = async (url: string, { arg: command }: {arg: CommandInput}) => {
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(command),
-    });
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-};
+export type UsePostCommandArgs = {
+    request?: CommandInput;
+    config?: SWRConfiguration<CommandResult, Error>;
+}
 
-export const usePostCommand = () => {
-    const { trigger, data, error, isMutating } = useSWRMutation<CommandResult, Error, string, CommandInput>('/api/command', fetcher);
-    return {
-        trigger, // function to call the API with command input
+
+export const usePostCommand = ({
+    request,
+    config
+}: UsePostCommandArgs) => {
+    const fetcher = async () => {
+        const response = await fetch('/api/command', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(request),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    };
+    const key = !!request ? { request } : null;
+    const {
         data,
         error,
-        isMutating,
+        isValidating
+    } = useSWR<CommandResult>(key,fetcher,config);
+    return {
+        data,
+        error,
+        isValidating
     };
 };

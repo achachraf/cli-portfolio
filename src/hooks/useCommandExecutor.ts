@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getShortcutCmd, isShortcutCmd } from '@/components/Shortcuts';
+import { usePostCommand } from './swr/usePostCommand';
 
 export const useCommandExecutor =
     (
+        input: string,
+        setInput: React.Dispatch<React.SetStateAction<string>>,
         context: string,
         setContext: (path: string) => void,
         setOutput: React.Dispatch<React.SetStateAction<ReturnLine[]>>,
@@ -10,7 +13,9 @@ export const useCommandExecutor =
         setHistory:  React.Dispatch<React.SetStateAction<string[]>>,
         setHistoryIndex: (index: number) => void
     ) => {
-    const executeCommand = async (input: string) => {
+
+    const {trigger: postCommand} = usePostCommand()
+    const executeCommand = async () => {
         let toExecute = input;
         if (isShortcutCmd(input)) {
             toExecute = getShortcutCmd(input);
@@ -23,16 +28,17 @@ export const useCommandExecutor =
             setHistory((prevHistory) => [...prevHistory, input]);
             setHistoryIndex(history.length + 1);
             const request: CommandInput = createCommandInput(toExecute);
-            let result: CommandResult;
             try {
-                const res = await fetch(`/api/command`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(request),
-                });
-                result = await res.json();
+                const result = await postCommand(request)
+                if (result.error) {
+                    cmdResult = {
+                        type: 'text',
+                        data: result.error,
+                    } as RawContent;
+                } else {
+                    cmdResult = result.output;
+                }
+                ctxResult = result.context;
             } catch (err) {
                 const error = err as Error;
                 setOutput((prevOutput) => [
@@ -43,15 +49,6 @@ export const useCommandExecutor =
                 return;
             }
 
-            if (result.error) {
-                cmdResult = {
-                    type: 'text',
-                    data: result.error,
-                } as RawContent;
-            } else {
-                cmdResult = result.output;
-            }
-            ctxResult = result.context;
         }
         setOutput((prevOutput) => [
             ...prevOutput,
@@ -60,9 +57,13 @@ export const useCommandExecutor =
         ]);
 
         setContext(ctxResult.path);
+        setInput('');
     };
 
     const createCommandInput = (input: string): CommandInput => {
+        if (input.endsWith('/')) {
+            input = input.slice(0, -1);
+        }
         const sliced = input.trim().split(/\s+/);
         const tool = sliced[0];
         let params: string[] = [];

@@ -8,8 +8,6 @@ const OutputFactory: React.FC<RawContent|undefined> = (content: RawContent | und
   if(content == undefined){
     return <br></br>
   }
-  console.log(content);
-  console.log(content.type);
   switch (content.type) {
     case 'text' || undefined:
       return <TextualOutput {...content} />;

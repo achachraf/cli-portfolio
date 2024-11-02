@@ -1,10 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
+import React, {useEffect, useState} from "react";
+import {useInputHandler} from "@/hooks/useInputHandler";
 
-export const useInputHistory = () => {
-    const [input, setInput] = useState('');
+export const useInputHistory = (
+    input: string,
+    setInput: React.Dispatch<React.SetStateAction<string>>
+) => {
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number>(0);
-    const inputRef = useRef<HTMLInputElement>(null);
+
+
+
+    useEffect(() => {
+        if (history.length > 0) {
+            localStorage.setItem('history', JSON.stringify(history));
+        }
+    }, [history]);
+
 
     useEffect(() => {
         const storedHistory = localStorage.getItem('history');
@@ -15,11 +26,14 @@ export const useInputHistory = () => {
         }
     }, []);
 
-    useEffect(() => {
-        if (history.length > 0) {
-            localStorage.setItem('history', JSON.stringify(history));
+
+    const handleArrowKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'ArrowUp') {
+            setHistoryIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        } else if (e.key === 'ArrowDown') {
+            setHistoryIndex((prevIndex) => Math.min(prevIndex + 1, history.length));
         }
-    }, [history]);
+    };
 
     useEffect(() => {
         if (historyIndex === history.length) {
@@ -29,37 +43,11 @@ export const useInputHistory = () => {
         }
     }, [historyIndex]);
 
-    useEffect(() => {
-        inputRef.current?.focus();
-    }, []);
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInput(e.target.value);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, executeCommand: () => void) => {
-        if (e.key === 'Enter') {
-            if (input.trim() === 'clear') {
-                setInput('');
-                return;
-            }
-            executeCommand();
-        } else if (e.key === 'ArrowUp') {
-            setHistoryIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-        } else if (e.key === 'ArrowDown') {
-            setHistoryIndex((prevIndex) => Math.min(prevIndex + 1, history.length));
-        }
-    };
-
     return {
-        input,
-        setInput,
         history,
         setHistory,
         historyIndex,
         setHistoryIndex,
-        inputRef,
-        handleInputChange,
-        handleKeyDown,
+        handleArrowKey
     };
-};
+}

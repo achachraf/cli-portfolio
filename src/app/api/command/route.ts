@@ -11,6 +11,7 @@ export async function POST (req: Request) {
     let status = {status: 200}
     if(result.error !== '') {
         status = {status: 400}
+        console.error(result.error)
     }
     return new Response(JSON.stringify(result), status)
 }
@@ -24,7 +25,10 @@ const handleCommand = (input: CommandInput) : CommandResult => {
     }
     catch(error) {
         return {
-            output: '',
+            output: {
+                type: 'text',
+                data: ''
+            },
             context: input.context,
             error: (error as Error).message
         }

@@ -48,6 +48,7 @@ export class LsCommandHandler implements CommandHandler {
                 error: ''
             }
         } catch (error) {
+            console.error("Error listing files", error);
             return {
                 context: input.context,
                 error: "No such directory: "+path

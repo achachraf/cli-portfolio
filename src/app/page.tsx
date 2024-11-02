@@ -2,11 +2,14 @@
 
 import React, {useMemo, useState} from 'react';
 import OutputFactory from '@/components/output/OutputFactory';
-import { useInputHistory } from '@/hooks/useInputHistory';
+import { useInputHandler } from '@/hooks/useInputHandler';
 import { useOutput } from '@/hooks/useOutput';
 import { useContextPath } from '@/hooks/useContextPath';
 import { useCommandExecutor } from '@/hooks/useCommandExecutor';
 import { useDelayedDisplay } from '@/hooks/useDelayedDisplay';
+import {useInputHistory} from "@/hooks/useInputHistory";
+import {useSuggestions} from "@/hooks/useSuggestions";
+import {useSpecialCommands} from "@/hooks/useSpecialCommands";
 
 export default function Home() {
   const documentation = `
@@ -23,12 +26,15 @@ export default function Home() {
     For example, to list all projects, you can type "projects" or "p" below and press enter.
 `;
 
-  const { input, history, setHistory, setHistoryIndex, inputRef, handleInputChange, handleKeyDown } = useInputHistory();
   const { output, setOutput, outputContainerRef } = useOutput();
+  const { input, setInput, inputRef, handleInputChange, handleEnterKey } = useInputHandler(setOutput);
+  const { history, setHistory, setHistoryIndex, handleArrowKey } = useInputHistory(input, setInput);
   const { context, setContext } = useContextPath();
-  const { executeCommand } = useCommandExecutor(context, setContext, setOutput, history, setHistory, setHistoryIndex);
+  const { executeCommand } = useCommandExecutor(input, setInput, context, setContext, setOutput, history, setHistory, setHistoryIndex);
+  const {handleTabKey} = useSuggestions(context, setOutput, input, setInput);
   const [showDocumentation, setShowDocumentation] = useState(false);
   const { showUserInput } = useDelayedDisplay(setShowDocumentation);
+  const {handleCtrlC} = useSpecialCommands(setOutput, setInput, input, context);
 
   const renderedOutput = useMemo(() => output.map((line, index) => (
       <p key={index}>
@@ -36,6 +42,13 @@ export default function Home() {
         {line.value && <OutputFactory {...line.value as RawContent} />}
       </p>
   )), [output]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    handleArrowKey(e);
+    handleEnterKey(e, executeCommand);
+    handleTabKey(e);
+    handleCtrlC(e);
+  }
 
   return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
@@ -60,7 +73,7 @@ export default function Home() {
                         className="outline-none bg-transparent text-white flex-shrink w-full"
                         value={input}
                         onChange={handleInputChange}
-                        onKeyDown={(e) => handleKeyDown(e,  () =>  executeCommand(input))}
+                        onKeyDown={handleKeyDown}
                     />
                   </div>
               )}

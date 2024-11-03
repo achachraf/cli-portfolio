@@ -1,91 +1,83 @@
-# Portfolio CLI
+Based on the information retrieved, I have the following details to create a README for the `cli-portfolio` project. Here is a draft for the README.md file:
 
-This is a portfolio project built using [Next.js](https://nextjs.org/) and React. The project simulates a command-line interface (CLI) to navigate through different sections of the portfolio.
+---
 
-## Table of Contents
+# CLI Portfolio
 
-- [Getting Started](#getting-started)
-- [Commands](#commands)
-- [Project Structure](#project-structure)
-- [Learn More](#learn-more)
-- [Deploy on Vercel](#deploy-on-vercel)
+A UNIX-like portfolio!
 
-## Getting Started
+## Project Description
 
-First, clone the repository and install the dependencies:
+This is a portfolio project designed to resemble a UNIX-like environment. It showcases various projects and skills in a unique and interactive manner.
 
-```bash
-git clone https://github.com/achrafxx/portfolio-cli.git
-cd portfolio-cli
-npm install
-```
+## Features
 
-Then, run the development server:
+- UNIX-like interface
+- Interactive portfolio navigation
+- Showcases various projects and skills
 
-```bash
-npm run dev
-```
+## Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To install and run the project locally, follow these steps:
 
-## Commands
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/achachraf/cli-portfolio.git
+   cd cli-portfolio
+   ```
 
-The CLI supports the following commands:
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
 
-- `h, help`: Display the help message
-- `p, projects`: Show all projects directories
-- `project <name>`: Navigate to a project directory
-- `e, experiences`: Show all experience directories
-- `experience <name>`: Navigate to an experience directory
-- `a, about`: Show information about me
+3. Run the development server:
+   ```sh
+   npm run dev
+   ```
 
-For example, to list all projects, you can type projects or p and press enter.
+4. Open your browser and navigate to `http://localhost:3000`.
 
-## Project Structure
+## Scripts
 
-portfolio-cli/
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   ├── components/
-│   │   ├── output/
-│   │   │   ├── OutputFactory.tsx
-│   │   │   ├── experience/
-│   │   │   │   ├── DetailedExperience.tsx
-│   │   │   │   ├── ExperiencesOutput.tsx
-│   ├── context/
-│   │   ├── InputRefContext.tsx
-│   ├── hooks/
-│   │   ├── useInputHandler.ts
-│   │   ├── useOutput.ts
-│   │   ├── useContextPath.ts
-│   │   ├── useCommandExecutor.ts
-│   │   ├── useDelayedDisplay.ts
-│   │   ├── useInputHistory.ts
-│   │   ├── useSuggestions.ts
-│   │   ├── useSpecialCommands.ts
-│   │   ├── useCheckEnv.ts
-│   │   ├── swr/
-│   │   │   ├── useGetUsername.ts
-│   ├── styles/
-│   │   ├── globals.css
-├── public/
-│   ├── images/
-├── package.json
-├── README.md
+The following scripts are available:
 
+- `npm run dev`: Runs the development server.
+- `npm run build`: Builds the project for production.
+- `npm run start`: Starts the production server.
+- `npm run lint`: Runs the linter.
 
-## Learn More
+## Dependencies
 
-To learn more about Next.js, take a look at the following resources:
+- `@fortawesome/fontawesome-free`: ^6.5.2
+- `@fortawesome/free-solid-svg-icons`: ^6.5.2
+- `@fortawesome/react-fontawesome`: ^0.2.2
+- `@heroicons/react`: ^2.1.3
+- `next`: 14.0.4
+- `react`: ^18
+- `react-dom`: ^18
+- `swr`: ^2.2.5
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [React Documentation](https://reactjs.org/docs) - learn about React features and API.
+## Dev Dependencies
 
-## Deploy on Vercel
+- `@types/node`: ^20
+- `@types/react`: ^18
+- `@types/react-dom`: ^18
+- `autoprefixer`: ^10.0.1
+- `eslint`: ^8
+- `eslint-config-next`: 14.0.4
+- `postcss`: ^8
+- `tailwindcss`: ^3.3.0
+- `typescript`: ^5
 
-The easiest way to deploy this project is to use the [Vercel Platform](https://vercel.com/new?utm_source=achrafxx&utm_campaign=oss).
+## Contributing
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## Contact
+
+For any inquiries or feedback, please contact [achachraf](https://github.com/achachraf).
+
+---
+
+Feel free to add any additional sections or modify the content as needed.

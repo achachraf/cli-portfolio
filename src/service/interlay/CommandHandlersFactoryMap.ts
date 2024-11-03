@@ -4,29 +4,40 @@ import {CatCommandHandler} from "@/service/application/handlers/CatCommandHandle
 import {CdCommandHandler} from "@/service/application/handlers/CdCommandHandler";
 import {LsCommandHandler} from "@/service/application/handlers/LsCommandHandler";
 import {getPortfolioDataService} from "@/service/interlay/PortfolioDataServiceFactory";
+import {getSystemDataService} from "@/service/interlay/SystemHierarchyServiceFactory";
+import SystemHierarchyService from "../application/SystemHierarchyService";
+import PortfolioDataService from "@/service/application/PortfolioDataService";
 
 export default class CommandHandlersFactoryMap implements CommandHandlersFactory {
 
+    private systemHierarchyService: SystemHierarchyService | undefined = undefined;
 
-    getCommandHandler(command: string): CommandHandler {
-        const handler = handlers.get(command);
-        if(handler === undefined) {
-            throw new Error(`Command not found: ${command}`);
+    private portfolioDataService: PortfolioDataService | undefined = undefined;
+
+    async getCommandHandler(command: string): Promise<CommandHandler> {
+        if(this.systemHierarchyService === undefined || this.portfolioDataService === undefined) {
+            this.portfolioDataService = getPortfolioDataService();
+            const systemDataService = getSystemDataService();
+            this.systemHierarchyService = new SystemHierarchyServiceJson();
+            await this.systemHierarchyService.initialize(this.portfolioDataService, systemDataService);
         }
-        return handler;
+        const handlerFactory = handlers.get(command);
+        if(handlerFactory === undefined) {
+            throw new Error(`No such command: ${command}`);
+        }
+        return handlerFactory(this.systemHierarchyService, this.portfolioDataService);
+
     }
     
 }
 
-const portfolioDataService = getPortfolioDataService();
-const systemHierarchyService = new SystemHierarchyServiceJson(portfolioDataService);
 
-const handlers = new Map<string, CommandHandler>(
+const handlers = new Map<string, (systemHierarchyService: SystemHierarchyService, portfolioDataService: PortfolioDataService) => CommandHandler>(
     [
-        ['ls', new LsCommandHandler(systemHierarchyService, portfolioDataService)],
-        ['cd', new CdCommandHandler(systemHierarchyService,portfolioDataService)],
-        ['cat', new CatCommandHandler(systemHierarchyService, portfolioDataService)],
-        ['display', new DisplayCommandHandler(systemHierarchyService,portfolioDataService)],
+        ['ls', (systemHierarchyService, portfolioDataService) => new LsCommandHandler(systemHierarchyService, portfolioDataService)],
+        ['cd', (systemHierarchyService, portfolioDataService) => new CdCommandHandler(systemHierarchyService,portfolioDataService)],
+        ['cat', (systemHierarchyService, portfolioDataService) => new CatCommandHandler(systemHierarchyService, portfolioDataService)],
+        ['display', (systemHierarchyService, portfolioDataService) => new DisplayCommandHandler(systemHierarchyService,portfolioDataService)],
         // ['pwd', new PwdCommandHandler()],
         // ['echo', new EchoCommandHandler()],
         // ['mkdir', new MkdirCommandHandler()],
@@ -39,4 +50,5 @@ const handlers = new Map<string, CommandHandler>(
         // ['exit', new ExitCommandHandler()]
     ]
 );
+
 

@@ -1,5 +1,5 @@
 export default interface PortfolioDataService {
 
-    getPortfolio(): Portfolio
+    getPortfolio(): Promise<Portfolio>
 
 }

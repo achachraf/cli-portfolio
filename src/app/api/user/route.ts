@@ -5,7 +5,7 @@ const portfolioDataService = getPortfolioDataService();
 
 export async function GET(req: NextRequest) {
 
-    const portfolio: Portfolio = portfolioDataService.getPortfolio();
+    const portfolio: Portfolio = await portfolioDataService.getPortfolio();
     const field = req.nextUrl.searchParams.get('field');
     if(field === 'name') {
         return new NextResponse(JSON.stringify({name: portfolio.name}), {status: 200});

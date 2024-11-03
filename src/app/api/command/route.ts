@@ -7,7 +7,7 @@ const handlersFactory: CommandHandlersFactory = new CommandHandlersFactoryMap()
 
 export async function POST (req: Request) {
     const body:CommandInput = await req.json()
-    const result:CommandResult = handleCommand(body)
+    const result:CommandResult = await handleCommand(body)
     if(result.error !== '') {
         return new NextResponse(JSON.stringify({error: result.error}), {status: 400})
     }
@@ -15,13 +15,13 @@ export async function POST (req: Request) {
 }
 
 
-const handleCommand = (input: CommandInput) : CommandResult => {
+const handleCommand = async (input: CommandInput) : Promise<CommandResult> => {
     try{
-        return handlersFactory
-                .getCommandHandler(input.tool)
-                .handle(input)
+        const handler = await handlersFactory.getCommandHandler(input.tool)
+        return await handler.handle(input)
     }
     catch(error) {
+        console.error(error)
         return {
             output: {
                 type: 'text',

@@ -11,7 +11,7 @@ export class FilePortfolioDataService implements PortfolioDataService {
         this.portfolioDataPath = portfolioDataPath;
     }
 
-    getPortfolio(): Portfolio {
+    async getPortfolio(): Promise<Portfolio> {
         if(this.portfolio === undefined) {
             try {
                 const portfolioContent = fs.readFileSync(this.portfolioDataPath, 'utf8');
@@ -23,6 +23,6 @@ export class FilePortfolioDataService implements PortfolioDataService {
                 throw new Error(`Error while initializing portfolio`);
             }
         }
-        return this.portfolio;
+        return Promise.resolve(this.portfolio);
     }
 }

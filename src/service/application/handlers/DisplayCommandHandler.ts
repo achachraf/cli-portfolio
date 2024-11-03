@@ -7,15 +7,16 @@ export class DisplayCommandHandler implements CommandHandler {
 
     private systemHierarchyService: SystemHierarchyService;
 
-    private readonly portfolio: Portfolio;
+    private portfolioDataService: PortfolioDataService;
 
     constructor(systemHierarchyService: SystemHierarchyService, portfolioDataService: PortfolioDataService) {
         this.systemHierarchyService = systemHierarchyService
-        this.portfolio = portfolioDataService.getPortfolio();
+        this.portfolioDataService = portfolioDataService
     }
 
 
-    handle(input: CommandInput): CommandResult {
+    async handle(input: CommandInput): Promise<CommandResult> {
+        const portfolio = await this.portfolioDataService.getPortfolio();
         const error:CommandResult|null = handleBadTool(input.tool, 'display')
         if(error !== null) {
             return error
@@ -27,8 +28,8 @@ export class DisplayCommandHandler implements CommandHandler {
                 error: "Invalid number of arguments, display requires exactly one json argument"
             }
         }
-        const {parent, filename} = splitPath(input, this.portfolio);
-        const content: JsonContent | undefined = this.systemHierarchyService.read(parent, filename) as JsonContent | undefined;
+        const {parent, filename} = splitPath(input, portfolio);
+        const content: JsonContent | undefined = await this.systemHierarchyService.read(parent, filename) as JsonContent | undefined;
         if (content === undefined) {
             return {
                 context: input.context,

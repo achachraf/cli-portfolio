@@ -1,3 +1,3 @@
 interface CommandHandlersFactory {
-    getCommandHandler(command: string): CommandHandler;
+    getCommandHandler(command: string): Promise<CommandHandler>;
 }

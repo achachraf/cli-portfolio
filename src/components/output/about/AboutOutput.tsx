@@ -21,7 +21,7 @@ const About = ({ about }:{about:About}) => {
   return (
     <div className="flex flex-col text-white p-4 rounded shadow-md">
       <div className="flex items-center mb-4">
-        <Image className="w-20 h-20 rounded-full mr-4" src={image} alt="Achraf Achkari" />
+        <Image className="w-20 h-20 rounded-full mr-4" src={image} alt="Achraf Achkari" width={50} height={50} />
         <div>
           <h2 className="text-xl font-bold">{FullName}</h2>
           <p className="">{title}</p>

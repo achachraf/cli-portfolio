@@ -1,3 +1,3 @@
 interface CommandHandler {
-    handle(input: CommandInput): CommandResult;
+    handle(input: CommandInput): Promise<CommandResult>;
 }

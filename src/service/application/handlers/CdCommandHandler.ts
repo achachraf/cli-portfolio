@@ -7,18 +7,19 @@ export class CdCommandHandler implements CommandHandler {
 
     private systemHierarchyService: SystemHierarchyService;
 
-    private portfolio: Portfolio;
+    private portfolioDataService: PortfolioDataService;
 
     constructor(systemHierarchyService: SystemHierarchyService, portfolioDataService: PortfolioDataService) {
         this.systemHierarchyService = systemHierarchyService
-        this.portfolio = portfolioDataService.getPortfolio();
+        this.portfolioDataService = portfolioDataService
     }
-    handle(input: CommandInput): CommandResult {
+    async handle(input: CommandInput): Promise<CommandResult> {
+        const portfolio = await this.portfolioDataService.getPortfolio();
         const error:CommandResult|null = handleBadTool(input.tool, 'cd')
         if(error !== null) {
             return error
         }
-        let usernamePath = "/home/" + this.portfolio.name.toLowerCase();
+        let usernamePath = "/home/" + portfolio.name.toLowerCase();
         if(input.params.length === 0) {
             return {
                 context: {
@@ -28,7 +29,8 @@ export class CdCommandHandler implements CommandHandler {
             }
         }
         const path = resolveAbsolutePath(input, usernamePath);
-        if(this.systemHierarchyService.exists(path)) {
+        const exists = await this.systemHierarchyService.exists(path);
+        if(exists) {
             const cleanContextPath = path.endsWith('/') ? path.slice(0, -1) : path;
             return {
                 context: {

@@ -1,0 +1,116 @@
+{
+    "name": "John",
+    "lastName": "Doe",
+    "projects": [
+        {
+            "name": "Project A",
+            "description": "A comprehensive test bed platform",
+            "logo": "https://example.com/logo.png",
+            "links": [
+                {
+                    "name": "Deployed",
+                    "url": "https://example.com/"
+                },
+                {
+                    "name": "Github",
+                    "url": "https://github.com/example/project"
+                }
+            ],
+            "tasks": [
+                {
+                    "name": "Proxy Service",
+                    "description": "Enhance the proxy to support new protocols and security standards",
+                    "status": "In Progress",
+                    "technologies": [
+                        "Python",
+                        "Flask",
+                        "GraphQL",
+                        "React",
+                        "Docker",
+                        "Kubernetes"
+                    ]
+                },
+                {
+                    "name": "Validation Service",
+                    "description": "Unified API for validation services",
+                    "status": "Done",
+                    "technologies": [
+                        "Node.js",
+                        "Express",
+                        "MongoDB",
+                        "Jest"
+                    ]
+                }
+            ]
+        }
+    ],
+    "experiences": [
+        {
+            "name": "lead-developer-companyA",
+            "company": "Company A",
+            "position": "Lead Developer",
+            "description": "Led a team to deliver high-quality software solutions",
+            "startDate": "2023-01-01",
+            "endDate": "current",
+            "logo": "https://example.com/logo.png"
+        },
+        {
+            "name": "backend-engineer-companyA",
+            "company": "Company A",
+            "position": "Backend Engineer",
+            "description": "Focused on backend architecture and performance optimization",
+            "startDate": "2021-10-01",
+            "endDate": "2022-12-31",
+            "logo": "https://example.com/logo.png"
+        }
+    ],
+    "education": [
+        {
+            "degree": "Master's Degree in Computer Science",
+            "school": "University of Example",
+            "startDate": "2016",
+            "endDate": "2020",
+            "logo": "/university_logo.png"
+        }
+    ],
+    "about": {
+        "title": "Software Engineer",
+        "FullName": "John Doe",
+        "image": "https://example.com/avatar.png",
+        "description": "Lead Developer with extensive experience in software architecture and scalable applications.",
+        "skills": [
+            "Python",
+            "Node.js",
+            "React",
+            "Kubernetes",
+            "GraphQL",
+            "Docker",
+            "MongoDB",
+            "CI/CD",
+            "RESTful APIs",
+            "Agile methodologies",
+            "Scrum",
+            "SQL"
+        ],
+        "contact": {
+            "email": "john.doe@example.com",
+            "phone": "+1 123-456-7890",
+            "linkedin": "https://www.linkedin.com/in/johndoe",
+            "github": "https://github.com/johndoe",
+            "Address": "Somewhere, USA"
+        },
+        "languages": [
+            {
+                "name": "English",
+                "level": "C2"
+            }
+        ],
+        "interests": [
+            "AI and Machine Learning",
+            "Photography",
+            "Traveling",
+            "Hiking",
+            "Chess"
+        ]
+    }
+}

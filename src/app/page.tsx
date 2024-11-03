@@ -84,16 +84,17 @@ export default function Home() {
           {renderedOutput}
           {showUserInput && (
               <div className="flex items-center">
-                <nobr className="flex-grow"><span className="text-green-700">{username}@portfolio</span>:<span
-                    className="text-blue-400">{context}</span><span className="font-bold">$</span>&nbsp;</nobr>
-                <input
-                    ref={inputRef}
-                    type="text"
-                    className="outline-none bg-transparent text-white flex-shrink w-full"
-                    value={input}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
-                />
+                  <div className="flex-grow whitespace-nowrap"><span
+                      className="text-green-700">{username}@portfolio</span>:<span
+                      className="text-blue-400">{context}</span><span className="font-bold">$</span>&nbsp;</div>
+                  <input
+                      ref={inputRef}
+                      type="text"
+                      className="outline-none bg-transparent text-white flex-shrink w-full"
+                      value={input}
+                      onChange={handleInputChange}
+                      onKeyDown={handleKeyDown}
+                  />
               </div>
           )}
         </div>

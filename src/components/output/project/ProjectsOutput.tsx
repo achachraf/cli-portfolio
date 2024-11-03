@@ -13,7 +13,7 @@ const ProjectsOutput = ({projects}:{projects: Project[]}) => {
                         alt={`${project.name} Logo`}
                         width={150}
                         height={150}
-                        objectFit="cover"
+                        style={{objectFit: 'cover'}}
                         className="rounded-md"
                       />
                     </div>

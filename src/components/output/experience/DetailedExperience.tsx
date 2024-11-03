@@ -19,7 +19,7 @@ const DetailedExperience = ({experience}: {experience: Experience}) => {
                         alt={`${experience.name} Logo`}
                         width={120}
                         height={80}
-                        objectFit="cover"
+                        style={{objectFit: 'cover'}}
                         className="rounded-md"
                     />
                 </div>

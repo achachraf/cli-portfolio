@@ -8,7 +8,6 @@ export const useSpecialCommands = (
 ) => {
 
     const handleCtrlC = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        console.log({context});
         if (e.key === 'c' && e.ctrlKey) {
             e.preventDefault();
             setOutput((prevOutput) => [

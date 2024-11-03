@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { getShortcutCmd, isShortcutCmd } from '@/components/Shortcuts';
-import { usePostCommand } from './swr/usePostCommand';
+import React from 'react';
+import {getShortcutCmd, isShortcutCmd} from '@/components/Shortcuts';
+import {usePostCommand} from './swr/usePostCommand';
 
 export const useCommandExecutor =
     (
@@ -61,9 +61,6 @@ export const useCommandExecutor =
     };
 
     const createCommandInput = (input: string): CommandInput => {
-        if (input.endsWith('/')) {
-            input = input.slice(0, -1);
-        }
         const sliced = input.trim().split(/\s+/);
         const tool = sliced[0];
         let params: string[] = [];

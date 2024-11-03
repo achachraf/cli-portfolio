@@ -1,14 +1,18 @@
 import SystemHierarchyService from "../application/SystemHierarchyService";
 import fs from 'fs';
 import { FileNotFoundException} from "../application/Exceptions";
-import { getParentFolder, getPortfolio } from "../application/Handlers";
+import PortfolioDataService from "@/service/application/PortfolioDataService";
+import {buildExperiences, buildProjects, buildSynthesis} from "@/service/interlay/FileDescBuilders";
 
 export default class SystemHierarchyServiceJson implements SystemHierarchyService {
 
     private static systemDescription: FileDesc[];
 
-    constructor() {
-        SystemHierarchyServiceJson.initialize();
+    private readonly portfolio: Portfolio;
+
+    constructor(portfolioDataService: PortfolioDataService) {
+        this.portfolio = portfolioDataService.getPortfolio();
+        this.initialize();
     }
     exists(path: string): boolean {
         if(path === '') return true;
@@ -61,14 +65,13 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
         return currentLevel;
     }
 
-    private static initialize(): void {
+    private initialize(): void {
         if(SystemHierarchyServiceJson.systemDescription) return;
         try {
-            const portfolio:Portfolio  = getPortfolio();
-            const systemDescriptionPath = './src/service/interlay/SystemDescription.json';
+            const systemDescriptionPath = process.env.SYSTEM_DESCRIPTION_PATH || '/opt/cli-portfolio/systemDescription.json';
             const systemDescriptionContent = fs.readFileSync(systemDescriptionPath, 'utf8');
             const initialSystemDesc:FileDesc[]  = JSON.parse(systemDescriptionContent).files;
-            this.buildUserSystemDescription(initialSystemDesc, portfolio);
+            this.buildUserSystemDescription(initialSystemDesc, this.portfolio);
             SystemHierarchyServiceJson.systemDescription = initialSystemDesc;
 
         } catch (error) {
@@ -77,29 +80,29 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
     }
 
   
-    private static buildUserSystemDescription(initialSystemDesc: FileDesc[], porftolio: Portfolio) {
-        const projects:FileDesc[] = this.buildProjects(porftolio.projects);
-        const experiences:FileDesc[] = this.buildExperiences(porftolio.experiences);
+    private  buildUserSystemDescription(initialSystemDesc: FileDesc[], portfolio: Portfolio) {
+        const projects:FileDesc[] = buildProjects(portfolio.projects);
+        const experiences:FileDesc[] = buildExperiences(portfolio.experiences);
         const UserHome = initialSystemDesc
                         .find(file => file.name === 'home')
-                        ?.files?.find(file => file.name === porftolio.name.toLowerCase());
+                        ?.files?.find(file => file.name === portfolio.name.toLowerCase());
         if(UserHome) {
             UserHome.files = (UserHome.files?UserHome.files:[]).concat([
                 {
                     name: 'projects',
                     isDirectory: true,
-                    files: [...projects, this.buildSynthesis(porftolio.projects, 'projects')]
+                    files: [...projects, buildSynthesis(portfolio.projects, 'projects')]
                 },
                 {
                     name: 'experiences',
                     isDirectory: true,
-                    files: [...experiences, this.buildSynthesis(porftolio.experiences, 'experiences')]
+                    files: [...experiences, buildSynthesis(portfolio.experiences, 'experiences')]
                 },
                 {
                     name: 'about',
                     isDirectory: true,
                     files: [
-                        this.buildSynthesis(porftolio.about, 'about') 
+                        buildSynthesis(portfolio.about, 'about')
                     ]
                 }
             ]);
@@ -107,94 +110,7 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
 
     }
 
-    private static buildProjects(projects: Project[]): FileDesc[] {
-        return projects.map(project => {
-            return {
-                name: project.name.replace(/\s/g, '_'),
-                isDirectory: true,
-                files: [
-                    {
-                        name: 'description.txt',
-                        isDirectory: false,
-                        content: {
-                            type: 'text',
-                            data: project.description
-                        }
-                    },
-                    this.buildSynthesis(project, 'project'),
-                    {
-                        name: 'links',
-                        isDirectory: true,
-                        files: project.links?.map(link => {
-                            return {
-                                name: link.name,
-                                isDirectory: false,
-                                content: {
-                                    type: 'text',
-                                    data: link.url
-                                }
-                            }
-                        })
-                    },
-                    {
-                        name: 'tasks',
-                        isDirectory: true,
-                        files: project.tasks?.map(task => {
-                            return {
-                                name: task.name,
-                                isDirectory: false,
-                                content: {
-                                    type: 'text',
-                                    data: task.description
-                                }
-                            }
-                        })
-                    }
-                ]
-            }
-        });
-    }
 
-    private static buildExperiences(experiences: Experience[]): FileDesc[] {
-        return experiences.map(experience => {
-            return {
-                name: experience.name.replace(/\s/g, '_'),
-                isDirectory: true,
-                files: [
-                    {
-                        name: 'description.txt',
-                        isDirectory: false,
-                        content: this.buildExperienceInfo(experience)
-                    },
-                    this.buildSynthesis(experience, 'experience')
-                ]
-            }
-        });
-    }
-
-    private static buildExperienceInfo(experience: Experience): RawContent {
-        return {
-            type: 'text',
-            data:`Company: ${experience.company}
-            Position: ${experience.position}
-            Description: ${experience.description}
-            Start Date: ${experience.startDate}
-            End Date: ${experience.endDate}
-            `
-        } 
-    }
-
-    private static buildSynthesis(obj: any, dataType: string):FileDesc {
-        return {
-            name: 'synthesis.json',
-            isDirectory: false,
-            content: {
-                type: 'json',
-                data: JSON.stringify(obj),
-                dataType
-            } as JsonContent
-        }
-    }
 
 
 }

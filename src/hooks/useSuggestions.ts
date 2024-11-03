@@ -32,14 +32,11 @@ export const useSuggestions = (
             const currentTime = new Date().getTime();
             // Check if the time difference between consecutive Tab presses is short (e.g., 300ms)
             if (currentTime - lastTabPressTime < 1000) {
-                console.log("fast");
                 fetchFilesInCurrentDirectory(input, context).then(files => {
-                    console.log({files});
                     setSuggestions(files);
                 });
             }
             else{
-                console.log("too slow");
                 // one tab press: look if there is only one suggestion
                 fetchFilesInCurrentDirectory(input, context).then(files => {
                     if(files.length === 1){
@@ -63,9 +60,7 @@ export const useSuggestions = (
             }
         }
         const result = await postCommand(request);
-        console.log({input});
         const last = input.split(' ').length > 1 ? input.split(' ').slice(-1)[0] : '';
-        console.log({last});
         return result.output?.data?.split('\n')
             .filter((file: string) => file.startsWith(last)) ?? [];
 

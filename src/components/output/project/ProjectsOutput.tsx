@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 
 const ProjectsOutput = ({projects}:{projects: Project[]}) => {
-    console.log(projects);
     return (
         <div className="flex flex-col space-y-4">
             {projects.map((project, index) => (

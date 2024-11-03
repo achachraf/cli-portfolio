@@ -1,5 +1,5 @@
-import { FileNotFoundException } from "@/service/application/Exceptions"
 import CommandHandlersFactoryMap from "@/service/interlay/CommandHandlersFactoryMap"
+import {NextResponse} from "next/server";
 
 export const dynamic = 'force-dynamic' // defaults to auto
 
@@ -8,12 +8,10 @@ const handlersFactory: CommandHandlersFactory = new CommandHandlersFactoryMap()
 export async function POST (req: Request) {
     const body:CommandInput = await req.json()
     const result:CommandResult = handleCommand(body)
-    let status = {status: 200}
     if(result.error !== '') {
-        status = {status: 400}
-        console.error(result.error)
+        return new NextResponse(JSON.stringify({error: result.error}), {status: 400})
     }
-    return new Response(JSON.stringify(result), status)
+    return new Response(JSON.stringify(result), {status: 200})
 }
 
 

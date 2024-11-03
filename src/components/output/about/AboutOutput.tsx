@@ -1,10 +1,6 @@
 import React from 'react';
+import Image from "next/image";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLinkedIn} from '@awesome.com/free-brands-svg-icons'
-import { get } from 'http';
-
-// import { faEnvelope, faPhone, faLinkedin, faGithub, faMapMarkerAlt } from ' @fortawesome/free-solid-svg-icons';
 
 const About = ({ about }:{about:About}) => {
   const {
@@ -25,7 +21,7 @@ const About = ({ about }:{about:About}) => {
   return (
     <div className="flex flex-col text-white p-4 rounded shadow-md">
       <div className="flex items-center mb-4">
-        <img className="w-20 h-20 rounded-full mr-4" src={image} alt="Achraf Achkari" />
+        <Image className="w-20 h-20 rounded-full mr-4" src={image} alt="Achraf Achkari" />
         <div>
           <h2 className="text-xl font-bold">{FullName}</h2>
           <p className="">{title}</p>

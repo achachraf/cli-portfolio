@@ -11,17 +11,16 @@ export function getShortcutCmd(cmd: string): string {
 }
 
 
-const shortcutsMap: Map<string, (args:string[]) => string> = new Map([
+const shortcutsMap: Map<string, (args: string[]) => string> = new Map<string, (args: string[]) => string>([
     ['h', () => 'display help.json'],
     ['help', () => 'display help.json'],
     ['p', () => 'display /home/achraf/projects/synthesis.json'],
-    ['projects', () =>  'display /home/achraf/projects/synthesis.json'],
-    ['project', (args:string[]) => `display /home/achraf/projects/${args[0]}/synthesis.json`],
+    ['projects', () => 'display /home/achraf/projects/synthesis.json'],
+    ['project', (args: string[]): string => `display /home/achraf/projects/${args[0]}/synthesis.json`],
     ['e', () => 'display /home/achraf/experiences/synthesis.json'],
     ['experiences', () => 'display /home/achraf/experiences/synthesis.json'],
-    ['experience', (args:string[]) => `display /home/achraf/experiences/${args[0]}/synthesis.json`],
+    ['experience', (args: string[]): string => `display /home/achraf/experiences/${args[0]}/synthesis.json`],
     ['a', () => 'display /home/achraf/about/synthesis.json'],
     ['about', () => 'display /home/achraf/about/synthesis.json'],
     ['clear', () => 'clear']
-  
 ]);

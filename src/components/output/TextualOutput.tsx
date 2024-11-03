@@ -1,3 +1,5 @@
+import React from "react";
+
 const TextualOutput: React.FC<RawContent> = (content: RawContent) => {
     const {data: text}: RawContent = content as RawContent;
     return <>

@@ -1,18 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState} from 'react';
 
 export const useInputHandler = (
     setOutput: React.Dispatch<React.SetStateAction<ReturnLine[]>>
 ) => {
     const [input, setInput] = useState('');
 
-    const inputRef = useRef<HTMLInputElement>(null);
 
-
-
-
-    useEffect(() => {
-        inputRef.current?.focus();
-    }, []);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
@@ -32,7 +25,6 @@ export const useInputHandler = (
     return {
         input,
         setInput,
-        inputRef,
         handleInputChange,
         handleEnterKey,
     };

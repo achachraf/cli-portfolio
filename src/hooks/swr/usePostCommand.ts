@@ -9,10 +9,11 @@ const fetcher = async (url: string, { arg: command }: {arg: CommandInput}) => {
         },
         body: JSON.stringify(command),
     });
+    let json = await response.json();
     if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(json.error);
     }
-    return response.json();
+    return json;
 };
 
 export const usePostCommand = () => {

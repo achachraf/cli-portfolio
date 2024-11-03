@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {useInputHandler} from "@/hooks/useInputHandler";
 
 export const useInputHistory = (
     input: string,

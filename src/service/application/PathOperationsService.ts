@@ -39,5 +39,6 @@ export const splitPath = (input: CommandInput, portfolio: Portfolio): {parent: s
 export const getParentFolder = (path: string, userPath: string): string => {
     const pathParts = path.replace("~", userPath).split('/');
     pathParts.pop();
-    return pathParts.join('/');
+    const result = pathParts.join('/');
+    return result === "" ? "/" : result;
 }

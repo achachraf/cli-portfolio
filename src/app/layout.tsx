@@ -10,6 +10,10 @@ const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
       <html lang="en">
+      <head>
+        <title>Achraf&apos;s CLI Portfolio</title>
+        <meta name="description" content="CLI Portfolio of Achraf Achkari" />
+      </head>
       <body className={inter.className}>
       <InputRefProvider>
         <LayoutContent>{children}</LayoutContent>

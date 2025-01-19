@@ -1,6 +1,6 @@
 export interface SystemDataService {
 
-    getSystemData(): Promise<FileDesc[]>
+    getSystemData(): Promise<FileDesc>
 
-    updateSystemData(systemData: FileDesc[]): void
+    updateSystemData(systemData: FileDesc): void
 }

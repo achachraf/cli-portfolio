@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useRef, RefObject } from 'react';
 
-const InputRefContext = createContext<RefObject<HTMLInputElement> | null>(null);
+const InputRefContext = createContext<RefObject<HTMLInputElement | null> | null>(null);
 
 export const InputRefProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const inputRef = useRef<HTMLInputElement>(null);

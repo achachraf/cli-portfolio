@@ -1,6 +1,7 @@
 import React from 'react';
 import {getShortcutCmd, isShortcutCmd} from '@/components/Shortcuts';
 import {usePostCommand} from './swr/usePostCommand';
+import {NanoContent} from "@/domain/NanoContent";
 
 export const useCommandExecutor =
     (
@@ -11,7 +12,8 @@ export const useCommandExecutor =
         setOutput: React.Dispatch<React.SetStateAction<ReturnLine[]>>,
         history: string[],
         setHistory:  React.Dispatch<React.SetStateAction<string[]>>,
-        setHistoryIndex: (index: number) => void
+        setHistoryIndex: (index: number) => void,
+        onNanoOpen?: (content: NanoContent) => void
     ) => {
 
     const {trigger: postCommand} = usePostCommand()
@@ -49,6 +51,10 @@ export const useCommandExecutor =
                 return;
             }
 
+        }
+        if (cmdResult && cmdResult.type === 'nano') {
+            onNanoOpen?.(cmdResult as NanoContent);
+            cmdResult = undefined;
         }
         setOutput((prevOutput) => [
             ...prevOutput,

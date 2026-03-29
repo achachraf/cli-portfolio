@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import OutputFactory from '@/components/output/OutputFactory';
 import {useInputHandler} from '@/hooks/useInputHandler';
 import {useOutput} from '@/hooks/useOutput';
@@ -13,6 +13,8 @@ import {useSpecialCommands} from "@/hooks/useSpecialCommands";
 import {useCheckEnv} from '@/hooks/useCheckEnv';
 import {useInputRef} from "@/context/InputRefContext";
 import {useGetUsername} from '@/hooks/swr/useGetUsername';
+import NanoOutput from '@/components/output/NanoOutput';
+import {NanoContent} from '@/domain/NanoContent';
 
 export default function Home() {
   const documentation = `
@@ -30,17 +32,56 @@ export default function Home() {
 `;
 
   const { output, setOutput, outputContainerRef } = useOutput();
+  const [nanoSession, setNanoSession] = useState<NanoContent | null>(null);
+  const inputRef = useInputRef();
+
+  const handleNanoOpen = useCallback((session: NanoContent) => {
+      setNanoSession((current) => current ?? session);
+  }, []);
+
+  const handleNanoSave = useCallback(async (session: NanoContent, updated: string) => {
+      const response = await fetch('/api/nano', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              directory: session.directory,
+              filename: session.filename,
+              content: updated
+          })
+      });
+      if (!response.ok) {
+          let errorMessage = 'Unable to save file';
+          try {
+              const payload = await response.json();
+              if (payload?.error) {
+                  errorMessage = payload.error;
+              }
+          } catch {
+              // noop
+          }
+          throw new Error(errorMessage);
+      }
+  }, []);
+
+  const handleNanoExit = useCallback(() => {
+      setNanoSession(null);
+      setTimeout(() => {
+          inputRef.current?.focus();
+      }, 0);
+  }, [inputRef]);
+
   const { input, setInput, handleInputChange, handleEnterKey } = useInputHandler(setOutput);
   const { history, setHistory, setHistoryIndex, handleArrowKey } = useInputHistory(input, setInput);
   const { context, setContext } = useContextPath();
-  const { executeCommand } = useCommandExecutor(input, setInput, context, setContext, setOutput, history, setHistory, setHistoryIndex);
+  const { executeCommand } = useCommandExecutor(input, setInput, context, setContext, setOutput, history, setHistory, setHistoryIndex, handleNanoOpen);
   const {handleTabKey} = useSuggestions(context, setOutput, input, setInput);
   const [showDocumentation, setShowDocumentation] = useState(false);
   const { showUserInput } = useDelayedDisplay(setShowDocumentation);
   const {handleCtrlC} = useSpecialCommands(setOutput, setInput, input, context);
   const {isEnvReady, loading, checkEnv} = useCheckEnv();
   const {username, isUserLoading} = useGetUsername();
-  const inputRef = useInputRef();
 
   useMemo(() => {
       checkEnv()
@@ -48,11 +89,18 @@ export default function Home() {
 
 
   const renderedOutput = useMemo(() => output.map((line, index) => (
-      <p key={index}>
-        {!line.isOutput && (<><span className="text-green-700">{username}@portfolio</span>{':'}<span className="text-blue-400">{line.context?.path}</span><span className="font-bold">$</span>&nbsp;</>)}
+      <div key={index}>
+        {!line.isOutput && (
+            <>
+              <span className="text-green-700">{username}@portfolio</span>
+              {':'}
+              <span className="text-blue-400">{line.context?.path}</span>
+              <span className="font-bold">$</span>&nbsp;
+            </>
+        )}
         {line.value && <OutputFactory {...line.value as RawContent} />}
-      </p>
-  )), [output]);
+      </div>
+  )), [output, username]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     handleArrowKey(e);
@@ -78,11 +126,11 @@ export default function Home() {
   }
 
   return (
-      <div className='min-h-[55vh] max-h-[55vh] overflow-y-auto bg-black' ref={outputContainerRef}>
+      <div className='min-h-[55vh] max-h-[55vh] overflow-y-auto bg-black relative' ref={outputContainerRef}>
         {showDocumentation && (<pre className="text-white font-mono font-light">{documentation}</pre>)}
         <div className="bg-black text-white p-6 rounded-b-md h-full relative">
           {renderedOutput}
-          {showUserInput && (
+          {showUserInput && !nanoSession && (
               <div className="flex items-center">
                   <div className="flex-grow whitespace-nowrap"><span
                       className="text-green-700">{username}@portfolio</span>:<span
@@ -98,6 +146,11 @@ export default function Home() {
               </div>
           )}
         </div>
+        {nanoSession && (
+            <div className="absolute inset-0 z-40">
+                <NanoOutput content={nanoSession} onSave={handleNanoSave} onExit={handleNanoExit} fullScreen />
+            </div>
+        )}
       </div>
   );
 }

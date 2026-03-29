@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="108" fill="#0a0a0a"/>
+  <!-- Left brace { -->
+  <path d="M168 136 C136 136, 124 160, 124 184 L124 232 C124 252, 108 264, 88 268 C108 272, 124 284, 124 304 L124 352 C124 376, 136 400, 168 400" stroke="#00ff88" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Right brace } -->
+  <path d="M344 136 C376 136, 388 160, 388 184 L388 232 C388 252, 404 264, 424 268 C404 272, 388 284, 388 304 L388 352 C388 376, 376 400, 344 400" stroke="#00ff88" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Transform arrow > in center -->
+  <path d="M216 216 L280 268 L216 320" stroke="#ededed" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

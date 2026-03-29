@@ -69,6 +69,29 @@ export default class SystemHierarchyServiceJson implements SystemHierarchyServic
         }
     }
 
+    async write(directory: string, file: string, content: RawContent): Promise<void> {
+        if (this.systemDataService === undefined) {
+            throw new Error('SystemDataService not initialized');
+        }
+        const systemDesc = await this.systemDataService.getSystemData();
+        const filesAtPath = this.getFilesAtPath(systemDesc, directory);
+        const existingIndex = filesAtPath.findIndex((entry) => entry.name === file);
+        if (existingIndex !== -1) {
+            const existing = filesAtPath[existingIndex];
+            if (existing.isDirectory) {
+                throw new Error(`Path is a directory: ${directory}/${file}`);
+            }
+            existing.content = content;
+        } else {
+            filesAtPath.push({
+                name: file,
+                isDirectory: false,
+                content
+            });
+        }
+        this.systemDataService.updateSystemData(systemDesc);
+    }
+
 
     private getFilesAtPath(systemDir: FileDesc, path: string): FileDesc[]  {
         const segments = path.split('/').filter(segment => segment !== '');

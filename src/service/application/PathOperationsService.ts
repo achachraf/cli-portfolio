@@ -20,7 +20,7 @@ export const resolveAbsolutePath = (input: CommandInput, userPath: string): stri
     return path;
 }
 
-export const splitPath = (input: CommandInput, portfolio: Portfolio): {parent: string, filename: string} => {
+export const splitPath = (input: CommandInput, portfolio: Portfolio): {parent: string, filename: string, absolutePath: string} => {
     const filePath = input.params[0];
     let usernamePath = "/home/" + portfolio.name.toLowerCase();
     const absPath = resolveAbsolutePath(input, usernamePath);
@@ -31,7 +31,8 @@ export const splitPath = (input: CommandInput, portfolio: Portfolio): {parent: s
     }
     return {
         parent,
-        filename
+        filename,
+        absolutePath: absPath
     }
 }
 

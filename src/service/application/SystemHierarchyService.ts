@@ -9,6 +9,8 @@ export default interface SystemHierarchyService {
 
     read(directory: string, file: string): Promise<RawContent | undefined>
 
+    write(directory: string, file: string, content: RawContent): Promise<void>
+
     initialize(portfolioDataService: PortfolioDataService, systemDataService: SystemDataService): Promise<void>
 
 }
